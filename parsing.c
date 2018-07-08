@@ -36,9 +36,9 @@ int main(int argc, char **argv) {
     mpc_parser_t *Expr = mpc_new("expr");
     mpc_parser_t *Lispy = mpc_new("lispy");
 
-/* Define them with the following Language */
+    /* Define them with the following Language */
     mpca_lang(MPCA_LANG_DEFAULT,
-              "                                                     \
+              "                                         \
     number   : /-?[0-9]+/ ;                             \
     operator : '+' | '-' | '*' | '/' ;                  \
     expr     : <number> | '(' <operator> <expr>+ ')' ;  \
@@ -57,7 +57,17 @@ int main(int argc, char **argv) {
         char *input = readline("Mike's lispy> ");
         add_history(input);
 
-        printf("Your input was %s\n", input);
+        /* Attempt to Parse the user Input */
+        mpc_result_t r;
+        if (mpc_parse("<stdin>", input, Lispy, &r)) {
+            /* On Success Print the AST */
+            mpc_ast_print(r.output);
+            mpc_ast_delete(r.output);
+        } else {
+            /* Otherwise Print the Error */
+            mpc_err_print(r.error);
+            mpc_err_delete(r.error);
+        }
         free(input);
 
     }
