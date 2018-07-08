@@ -3,4 +3,4 @@ project(byol C)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
-add_executable(byol prompt.c)
+add_executable(byol parsing.c ../lib/mpc.c)
