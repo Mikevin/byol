@@ -6,8 +6,15 @@
 #ifdef _WIN32
 
 #include <string.h>
+#include <signal.h>
 
 static char buffer[2048];
+
+volatile sig_atomic_t stop;
+
+void sighandler(int signum) {
+    stop = 1;
+}
 
 /* Fake readline function */
 char *readline(char *prompt) {
@@ -19,8 +26,11 @@ char *readline(char *prompt) {
     return cpy;
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
 /* Fake add_history function */
 void add_history(char *unused) {}
+#pragma clang diagnostic pop
 
 /* Otherwise include the editline headers */
 #else
@@ -29,6 +39,9 @@ void add_history(char *unused) {}
 #endif
 
 int main(int argc, char **argv) {
+
+    /* Handle signals */
+    signal(SIGINT, sighandler);
 
     /* Create Some Parsers */
     mpc_parser_t *Number = mpc_new("number");
@@ -40,7 +53,7 @@ int main(int argc, char **argv) {
     mpca_lang(MPCA_LANG_DEFAULT,
               "                                         \
     number   : /-?[0-9]+/ ;                             \
-    operator : '+' | '-' | '*' | '/' ;                  \
+    operator : '+' | '-' | '*' | '/' | '%';                  \
     expr     : <number> | '(' <operator> <expr>+ ')' ;  \
     lispy    : /^/ <operator> <expr>+ /$/ ;             \
   ",
@@ -51,7 +64,7 @@ int main(int argc, char **argv) {
     puts("Implementation by Mike van Leeuwen");
     puts("Press Ctrl+c to Exit\n");
 
-    while (1) {
+    while (!stop) {
 
         /* Now in either case readline will be correctly defined */
         char *input = readline("Mike's lispy> ");
