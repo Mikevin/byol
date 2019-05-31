@@ -30,7 +30,7 @@ void create_parser() {
     mpca_lang(MPCA_LANG_DEFAULT,
               "                                         \
             number   : /-?[0-9]+(\\.[0-9]*)?/ ;                 \
-            operator : '+' | '-' | '*' | '/' | '%' | \"mul\"  | \"sub\" | \"add\" | \"div\" ;             \
+            operator : '+' | '-' | '*' | '/' | '%' | '^' | \"mul\"  | \"sub\" | \"add\" | \"div\" ;             \
             expr     : <number> | '(' <operator> <expr>+ ')' ;  \
             lispy    : /^/ <operator> <expr>+ /$/ ;             \
   ",
