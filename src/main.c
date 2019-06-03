@@ -43,9 +43,8 @@ int main(int argc, char **argv) {
         /* Attempt to Parse the user Input */
         mpc_result_t r;
         if (parse(input, &r)) {
-            //mpc_ast_print(r.output);
-            long result = eval(r.output);
-            printf("%li\n", result);
+            lval result = eval(r.output);
+            lval_println(result);
             mpc_ast_delete(r.output);
         } else {
             mpc_err_print(r.error);
