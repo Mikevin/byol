@@ -27,14 +27,14 @@ void create_parser() {
     Lispy = mpc_new("lispy");
 
     /* Define them with the following Language */
-    mpca_lang(MPCA_LANG_DEFAULT,
-              "                                         \
-            number   : /-?[0-9]+(\\.[0-9]*)?/ ;                 \
-            operator : '+' | '-' | '*' | '/' | '%' | '^' | \"mul\"  | \"sub\" | \"add\" | \"div\" ;             \
-            expr     : <number> | '(' <operator> <expr>+ ')' ;  \
-            lispy    : /^/ <operator> <expr>+ /$/ ;             \
-  ",
-              Number, Operator, Expr, Lispy);
+mpca_lang(MPCA_LANG_DEFAULT,
+    "                                                     \
+      number   : /-?[0-9]+/ ;                             \
+      operator : '+' | '-' | '*' | '/' ;                  \
+      expr     : <number> | '(' <operator> <expr>+ ')' ;  \
+      lispy    : /^/ <operator> <expr>+ /$/ ;             \
+    ",
+    Number, Operator, Expr, Lispy);
 
 }
 
