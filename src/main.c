@@ -4,6 +4,7 @@
 #include "util.h"
 #include "parsing.h"
 #include "eval.h"
+#include "lval.h"
 
 /* If we are compiling on Windows compile these functions */
 #ifdef _WIN32
